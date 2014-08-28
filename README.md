@@ -30,17 +30,17 @@ input = open('in.wav', 'rb')
 output = open('out.aac', 'wb')
 
 codec = pyfaac.pyfaac(samplerate, channels, bitrate)
-size = obj.getSize()
+size = codec.getSize()
 
 while True:
     data = input.read(size)
     if data:
-        stream = obj.encode(data)
+        stream = codec.encode(data)
         output.write(stream)
     else:
         break
 
-excess = obj.close()
+excess = codec.close()
 
 input.close()
 output.write(excess)
@@ -51,26 +51,27 @@ output.close()
 ## Interface
 
 ```
-pyfaac.pyfaac(samplerate, channels, bitrate)
+codec = pyfaac.pyfaac(samplerate, channels, bitrate)
 ```
+
 - `samplerate` — source PCM sample rate. AAC requires a minimum 16000 KHz;
 - `channels` — source PCM channels. 1 — mono, 2 — stereo;
 - `bitrate` — output AAC bitrate.
 
+```
+codec.getSize()
+```
+
+Returns the maximum size of data to be transmitted to the encoder.
 
 ```
-obj.getSize()
-```
-Returns the maximum size of the data to be transmitted to the encoder.
-
-```
-aac = obj.encode(data)
+aac = codec.encode(data)
 ```
 
 Encode raw PCM data to AAC. Each fragment begins with ADTS header and ready for transport stream.
 
 ```
-aac = obj.close()
+aac = codec.close()
 ```
 
 Close encoder and returns the residual AAC data.

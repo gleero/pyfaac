@@ -8,17 +8,17 @@ input = open('in.wav', 'rb')
 output = open('out.aac', 'wb')
 
 codec = pyfaac.pyfaac(samplerate, channels, bitrate)
-size = obj.getSize()
+size = codec.getSize()
 
 while True:
     data = input.read(size)
     if data:
-        stream = obj.encode(data)
+        stream = codec.encode(data)
         output.write(stream)
     else:
         break
 
-excess = obj.close()
+excess = codec.close()
 
 input.close()
 output.write(excess)
